@@ -41,6 +41,34 @@ app.get('/ping', async (req, res) => {
   });
 });
 
+app.get('/airports', async (req, res) => {
+  const searchTerm = 'SFO';
+
+  let qs;
+  if (searchTerm.length === 3) {
+    // FAA code
+    qs = `SELECT airportname from \`travel-sample\` WHERE faa = '${searchTerm.toUpperCase()}';`;
+  } else if (
+    searchTerm.length === 4 &&
+    (searchTerm.toUpperCase() === searchTerm ||
+      searchTerm.toLowerCase() === searchTerm)
+  ) {
+    // ICAO code
+    qs = `SELECT airportname from \`travel-sample\` WHERE icao = '${searchTerm.toUpperCase()}';`;
+  } else {
+    // Airport name
+    qs = `SELECT airportname from \`travel-sample\` WHERE LOWER(airportname) LIKE '%${searchTerm.toLowerCase()}%';`;
+  }
+
+  const result = await cluster.query(qs);
+  const rows = result.rows;
+
+  res.send({
+    data: rows,
+    context: [qs],
+  });
+});
+
 app.listen(3001, () => {
-  console.log('Example app listening on port http://localhost:3001/ping !');
+  console.log('Example app listening on port http://localhost:3001/ping or http://localhost:3001/airports!');
 });
