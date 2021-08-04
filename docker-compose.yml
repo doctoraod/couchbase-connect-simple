@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  backend:
+    platform: linux/amd64
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 3001:3001
+    container_name: couchbase-connect-simple
+    command: yarn start:dev

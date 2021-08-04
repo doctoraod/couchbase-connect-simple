@@ -5,6 +5,7 @@
   "scripts": {
     "build": "node utils/provision.js",
     "start": "node index.js",
+    "start:dev": "npm rebuild couchbase && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
