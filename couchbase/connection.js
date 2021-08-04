@@ -19,6 +19,6 @@ var cluster = new couchbase.Cluster(
 // Open a specific Couchbase bucket, `travel-sample` in this case.
 var bucket = cluster.bucket('travel-sample');
 // And select the default collection
-var coll = bucket.defaultCollection();
+var collection = bucket.defaultCollection();
 
-module.exports = cluster
+module.exports = { cluster, bucket, collection }

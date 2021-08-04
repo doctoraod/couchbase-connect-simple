@@ -1,6 +1,6 @@
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var cluster = require('./couchbase/connection');
+var connection = require('./couchbase/connection');
 var express = require('express');
 
 // Set up our express application
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/ping', async (req, res) => {
-  const result = await cluster.ping();
+  const result = await connection.cluster.ping();
   res.send({
     result
   });
@@ -48,7 +48,7 @@ app.get('/airports', async (req, res) => {
     qs = `SELECT airportname from \`travel-sample\` WHERE LOWER(airportname) LIKE '%${searchTerm.toLowerCase()}%';`;
   }
 
-  const result = await cluster.query(qs);
+  const result = await connection.cluster.query(qs);
   const rows = result.rows;
 
   res.send({
